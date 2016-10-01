@@ -2,7 +2,11 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.ptr.PointerByReference;
-import dao.ApplicationDao;
+import model.User;
+import org.apache.log4j.Logger;
+import service.GenericServiceImpl;
+import service.IGenericService;
+import util.HibernateUtil;
 
 /**
  * Created by MSI on 2016-10-01.
@@ -10,9 +14,15 @@ import dao.ApplicationDao;
 public class Application {
 
     private static final int MAX_TITLE_LENGTH = 1024;
-    private final DatabaseConfig databaseConfig = DatabaseConfig.getInstance();
+
+    User user;
+
+    Logger log = Logger.getLogger(Application.class);
 
     public void init() {
+        addUser();
+
+
         String lastTitle = "none";
         String lastProcess = "none";
         long lastChange = System.currentTimeMillis();
@@ -26,14 +36,15 @@ public class Application {
                 long change = System.currentTimeMillis();
                 double time = ((change - lastChange) / 1000.0);
                 lastChange = change;
-                System.out.println("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
+//                System.out.println("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
+                log.info("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
                 addToDB(lastTitle, lastProcess, time);
                 lastTitle = currentTitle;
                 lastProcess = currentProcess;
             }
             try
             {
-                Thread.sleep(500);
+                Thread.sleep(100);
             }
             catch (InterruptedException ex)
             {
@@ -42,8 +53,26 @@ public class Application {
         }
     }
 
-    private static void addToDB(String lastTitle, String lastProcess, double time) {
-        ApplicationDao.insert(DatabaseConfig.getConnection(), lastTitle, lastProcess, time);
+    private void addUser() {
+        IGenericService<model.User> userService = new GenericServiceImpl<model.User>(model.User.class, HibernateUtil.getSessionFactory());
+        user = new model.User();
+
+        user.setName("Hippo");
+
+        userService.save(user);
+    }
+
+    private void addToDB(String lastTitle, String lastProcess, double time) {
+//        ApplicationDao.insert(DatabaseConfig.getConnection(), lastTitle, lastProcess, time);
+
+        IGenericService<model.Application> applicationService = new GenericServiceImpl<model.Application>(model.Application.class, HibernateUtil.getSessionFactory());
+        model.Application application = new model.Application();
+        application.setId(0);
+        application.setName(lastProcess);
+        application.setSeconds(time);
+        application.setTitle(lastTitle);
+        application.setUserId(user);
+        applicationService.save(application);
     }
 
     private static String getActiveWindowTitle()
