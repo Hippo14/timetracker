@@ -5,10 +5,13 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.PointerByReference;
+import dao.ApplicationDao;
+import model.Application;
 
 public class Main
 {
     private static final int MAX_TITLE_LENGTH = 1024;
+    private static final DatabaseConfig databaseConfig = DatabaseConfig.getInstance();
 
     public static void main(String[] args) throws Exception
     {
@@ -26,6 +29,7 @@ public class Main
                 long time = (change - lastChange) / 1000;
                 lastChange = change;
                 System.out.println("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
+                addToDB(lastTitle, lastProcess, time);
                 lastTitle = currentTitle;
                 lastProcess = currentProcess;
             }
@@ -38,6 +42,10 @@ public class Main
                 // ignore
             }
         }
+    }
+
+    private static void addToDB(String lastTitle, String lastProcess, long time) {
+        ApplicationDao.insert(DatabaseConfig.getConnection(), lastTitle, lastProcess, time);
     }
 
     private static String getActiveWindowTitle()

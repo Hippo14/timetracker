@@ -1,8 +1,5 @@
 import org.h2.tools.DeleteDbFiles;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by MSI on 2016-10-01.
@@ -18,6 +15,28 @@ public class DatabaseConfig {
 
     private DatabaseConfig() {
         DeleteDbFiles.execute("~", DB_NAME, true);
+        prepare();
+    }
+
+    private void prepare() {
+        Connection connection = getConnection();
+        Statement statement = null;
+
+        String createUser = "CREATE TABLE USER(id int auto_increment primary key, name varchar(255))";
+        String createApplication = "CREATE TABLE APPLICATION(id int auto_increment primary key, name varchar(255), seconds int, userId int)";
+        String insertUser = "INSERT INTO USER(id, name) VALUES(0, 'Hippo')";
+        try {
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+            statement.execute(createUser);
+            statement.execute(createApplication);
+            statement.execute(insertUser);
+
+            statement.close();
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private final static class SingletonHolder {
