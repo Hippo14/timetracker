@@ -24,7 +24,7 @@ public class Application {
             if (!lastTitle.equals(currentTitle))
             {
                 long change = System.currentTimeMillis();
-                long time = (change - lastChange) / 1000;
+                double time = ((change - lastChange) / 1000.0);
                 lastChange = change;
                 System.out.println("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
                 addToDB(lastTitle, lastProcess, time);
@@ -42,7 +42,7 @@ public class Application {
         }
     }
 
-    private static void addToDB(String lastTitle, String lastProcess, long time) {
+    private static void addToDB(String lastTitle, String lastProcess, double time) {
         ApplicationDao.insert(DatabaseConfig.getConnection(), lastTitle, lastProcess, time);
     }
 

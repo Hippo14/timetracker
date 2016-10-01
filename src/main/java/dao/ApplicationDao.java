@@ -14,16 +14,17 @@ public class ApplicationDao {
     }
 
 
-    public static void insert(Connection connection, String lastTitle, String lastProcess, long time) {
+    public static void insert(Connection connection, String lastTitle, String lastProcess, double time) {
         PreparedStatement statement = null;
-        String sql = "INSERT INTO APPLICATION(name, seconds, userId) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO APPLICATION(name, seconds, userId, title) VALUES(?, ?, ?, ?)";
 
         try {
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             statement.setString(1, lastProcess);
-            statement.setInt(2, (int) time);
+            statement.setDouble(2, time);
             statement.setInt(3, 0);
+            statement.setString(4, lastTitle);
 
             statement.executeUpdate();
             statement.close();

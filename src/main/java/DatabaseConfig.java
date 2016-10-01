@@ -23,7 +23,7 @@ public class DatabaseConfig {
         Statement statement = null;
 
         String createUser = "CREATE TABLE IF NOT EXISTS USER(id int auto_increment primary key, name varchar(255))";
-        String createApplication = "CREATE TABLE IF NOT EXISTS APPLICATION(id int auto_increment primary key, name varchar(255), seconds int, userId int)";
+        String createApplication = "CREATE TABLE IF NOT EXISTS APPLICATION(id int auto_increment primary key, name varchar(255), seconds real, userId int, title varchar(255))";
 //        String insertUser = "INSERT INTO USER(id, name) VALUES(0, 'Hippo')";
         String insertUser = "INSERT INTO USER(id, name) SELECT 0, 'Hippo' WHERE NOT EXISTS(SELECT 1 FROM USER WHERE id = 0 AND name = 'Hippo');";
         try {
