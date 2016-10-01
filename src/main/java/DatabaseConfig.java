@@ -14,7 +14,7 @@ public class DatabaseConfig {
     private static final String DB_PASSWORD = "";
 
     private DatabaseConfig() {
-        DeleteDbFiles.execute("~", DB_NAME, true);
+//        DeleteDbFiles.execute("~", DB_NAME, true);
         prepare();
     }
 
@@ -22,9 +22,10 @@ public class DatabaseConfig {
         Connection connection = getConnection();
         Statement statement = null;
 
-        String createUser = "CREATE TABLE USER(id int auto_increment primary key, name varchar(255))";
-        String createApplication = "CREATE TABLE APPLICATION(id int auto_increment primary key, name varchar(255), seconds int, userId int)";
-        String insertUser = "INSERT INTO USER(id, name) VALUES(0, 'Hippo')";
+        String createUser = "CREATE TABLE IF NOT EXISTS USER(id int auto_increment primary key, name varchar(255))";
+        String createApplication = "CREATE TABLE IF NOT EXISTS APPLICATION(id int auto_increment primary key, name varchar(255), seconds int, userId int)";
+//        String insertUser = "INSERT INTO USER(id, name) VALUES(0, 'Hippo')";
+        String insertUser = "INSERT INTO USER(id, name) SELECT 0, 'Hippo' WHERE NOT EXISTS(SELECT 1 FROM USER WHERE id = 0 AND name = 'Hippo');";
         try {
             connection.setAutoCommit(false);
             statement = connection.createStatement();
