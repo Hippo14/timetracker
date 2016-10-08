@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="661006460">
+  <component name="DataSourceManagerImpl" format="xml" hash="412198154">
     <data-source source="LOCAL" name="H2 - jdbc:h2:~/timetracker" uuid="86cca240-924b-4ec3-8bad-07b472514a8d">
       <driver-ref>h2.unified</driver-ref>
       <synchronize>true</synchronize>
