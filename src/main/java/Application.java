@@ -36,7 +36,6 @@ public class Application {
                 long change = System.currentTimeMillis();
                 double time = ((change - lastChange) / 1000.0);
                 lastChange = change;
-//                System.out.println("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
                 log.info("Change! Last title: " + lastTitle + " lastProcess: " + lastProcess + " time: " + time + " seconds");
                 addToDB(lastTitle, lastProcess, time);
                 lastTitle = currentTitle;
@@ -63,8 +62,6 @@ public class Application {
     }
 
     private void addToDB(String lastTitle, String lastProcess, double time) {
-//        ApplicationDao.insert(DatabaseConfig.getConnection(), lastTitle, lastProcess, time);
-
         IGenericService<model.Application> applicationService = new GenericServiceImpl<model.Application>(model.Application.class, HibernateUtil.getSessionFactory());
         model.Application application = new model.Application();
         application.setId(0);
