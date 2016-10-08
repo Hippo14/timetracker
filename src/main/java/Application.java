@@ -27,12 +27,10 @@ public class Application {
         String lastProcess = "none";
         long lastChange = System.currentTimeMillis();
 
-        while (true)
-        {
+        while (true) {
             String currentTitle = getActiveWindowTitle();
             String currentProcess = getActiveWindowProcess();
-            if (!lastTitle.equals(currentTitle))
-            {
+            if (!lastTitle.equals(currentTitle)) {
                 long change = System.currentTimeMillis();
                 double time = ((change - lastChange) / 1000.0);
                 lastChange = change;
@@ -41,12 +39,10 @@ public class Application {
                 lastTitle = currentTitle;
                 lastProcess = currentProcess;
             }
-            try
-            {
+            try {
                 Thread.sleep(100);
             }
-            catch (InterruptedException ex)
-            {
+            catch (InterruptedException ex) {
                 // ignore
             }
         }
